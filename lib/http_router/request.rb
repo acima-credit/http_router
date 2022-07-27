@@ -7,7 +7,7 @@ class HttpRouter
 
     def initialize(path, rack_request)
       @rack_request = rack_request
-      @path = URI.unescape(path).split(/\//)
+      @path = CGI.unescape(path).split(%r{/})
       @path.shift if @path.first == ''
       @path.push('') if path[-1] == ?/
       @extra_env = {}
@@ -24,7 +24,7 @@ class HttpRouter
     end
 
     def path_finished?
-      @path.size == 0 or @path.size == 1 && @path.first == ''
+      @path.size.zero? or @path.size == 1 && @path.first == ''
     end
   end
 end
